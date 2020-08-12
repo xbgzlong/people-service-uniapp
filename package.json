@@ -1,0 +1,14 @@
+{
+  "name": "12349PeopleService",
+  "version": "1.0.1",
+  "description": "PeopleServiceShopAPP",
+  "author": "AlEN",
+  "private": true,
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "js-md5": "^0.7.3"
+  },
+  "engines": {},
+  "browserslist": []
+}
