@@ -39,7 +39,7 @@
 		{
 			"path": "pages/product/product",
 			"style": {
-				"navigationBarTitleText": "详情展示",
+				"navigationBarTitleText": "详情",
 				"app-plus": {
 					"titleNView": {
 						"type": "transparent"

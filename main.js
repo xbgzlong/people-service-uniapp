@@ -20,7 +20,6 @@ const goToLogin = function(){
 	    }
 	});
 	if (!logininfo) {
-		console.log("去登录")
 		setTimeout(function(){
 			uni.navigateTo({
 			    url: '/pages/public/login'
@@ -30,9 +29,14 @@ const goToLogin = function(){
 	}
 	
 }
+// 所有接口
 const bmBaseApi = {
 	getBmDisplayList:"serviceitem/getBmDisplayList",
 	login:'account/login',
+	getServiceitemList:"serviceitem/list",
+	getTypepagelist:"serviceitem/typepagelist",
+	getServiceDetail:'serviceitem/getData',
+	getServicePrice:'serviceitem/getPriceList',
 };
 
 const baseUrl = 'http://120.224.235.68:8060/';  
@@ -76,7 +80,6 @@ const httpTokenRequest = (opts, data) => {
 	        logininfo = ress.data
 	    }
 	});
-	console.log(logininfo)
 	if (!logininfo) {
 	    return false;
 	}
@@ -84,7 +87,7 @@ const httpTokenRequest = (opts, data) => {
 	param.token = logininfo.token;
 	param.loginMark = logininfo.loginMark;
 	if(data){
-		var type = data.typeof();
+		var type = typeof(data);
 		if (type === 'object' || type === 'array') {
 		    param.data = JSON.stringify(data);
 		}

@@ -7,8 +7,7 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-text">12349便民服务</view>
 			<view class="carouse-video">
-				<video id="myVideo" src="../../static/img/banner.mp4" objectFit="fill"
-				 @error="videoErrorCallback" controls></video>
+				<video id="myVideo" src="../../static/img/banner.mp4" objectFit="fill" @error="videoErrorCallback" controls></video>
 			</view>
 		</view>
 		<!-- 分类 -->
@@ -17,7 +16,7 @@
 				<image src="/static/img/bmfw.png"></image>
 				<text>便民服务</text>
 			</view>
-			<view class="cate-item" @click="goToLogin">
+			<view class="cate-item" @click="goToProductListPage">
 				<image src="/static/img/jjyl.png"></image>
 				<text>居家养老</text>
 			</view>
@@ -61,7 +60,7 @@
 			</view>
 			<text class="yticon icon-you"></text>
 		</view>
-		
+
 		<view class="guess-section">
 			<view v-for="(item, index) in ylgoodsList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
@@ -94,67 +93,69 @@
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
-			
+
 			loadData() {
 				var that = this;
-				let opts={
-				  url: this.$bmBaseApi.getBmDisplayList,
-				  method: 'get'
+				let opts = {
+					url: this.$bmBaseApi.getBmDisplayList,
+					method: 'get'
 				};
-				this.$httpTokenRequest(opts,null).then(
-				res=>{			
-					let logininfo = "";
-					uni.getStorage({
-					    key: 'logininfo',
-					    success: function(ress) {
-					        logininfo = ress.data
-					    }
+				this.$httpTokenRequest(opts, null).then(
+					res => {
+						let logininfo = "";
+						uni.getStorage({
+							key: 'logininfo',
+							success: function(ress) {
+								logininfo = ress.data
+							}
+						});
+						if (!logininfo) {
+							return false;
+						}
+						if (res.data.code == 200) {
+							'config.webapi + "/serviceitem/getImg?data=" + data[i].F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token'
+							that.bmgoodsList = res.data.data;
+							that.bmgoodsList.forEach(item => {
+								item.image = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark +
+									"&token=" + logininfo.token;
+								item.price = item.F_PriceStart;
+								item.title = item.F_ServiceName;
+							})
+						} else {
+							uni.showToast({
+								title: res.data.code + res.data.info,
+								duration: 1500
+							})
+						}
 					});
-					if (!logininfo) {
-					    return false;
-					}
-					if(res.data.code == 200){
-						'config.webapi + "/serviceitem/getImg?data=" + data[i].F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token'
-						that.bmgoodsList = res.data.data;
-						that.bmgoodsList.forEach(item=>{
-							item.image = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token;
-							item.price = item.F_PriceStart;
-							item.title = item.F_ServiceName;
-						})
-					}else{
-						uni.showToast({
-							title:res.data.code+res.data.info,
-							duration:1500
-						})
-					}
-				});
-				this.$httpTokenRequest(opts,null).then(
-				res=>{
-					let logininfo = "";
-					uni.getStorage({
-					    key: 'logininfo',
-					    success: function(ress) {
-					        logininfo = ress.data
-					    }
-					});
-					if (!logininfo) {
-					    return false;
-					}
-					if(res.data.code == 200){
-						that.ylgoodsList = res.data.data;
-						that.ylgoodsList.forEach(item=>{
-							item.image = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token;
-							item.price = item.F_PriceStart;
-							item.title = item.F_ServiceName;
-						})
-					}else{
-						uni.showToast({
-							title:res.data.code+res.data.info,
-							duration:1500
-						})
-					}
+				this.$httpTokenRequest(opts, null).then(
+					res => {
+						let logininfo = "";
+						uni.getStorage({
+							key: 'logininfo',
+							success: function(ress) {
+								logininfo = ress.data
+							}
+						});
+						if (!logininfo) {
+							return false;
+						}
+						if (res.data.code == 200) {
+							that.ylgoodsList = res.data.data;
+							that.ylgoodsList.forEach(item => {
+								item.image = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark +
+									"&token=" + logininfo.token;
+								item.price = item.F_PriceStart;
+								item.title = item.F_ServiceName;
+							})
+						} else {
+							uni.showToast({
+								title: res.data.code + res.data.info,
+								duration: 1500
+							})
+						}
 					})
-					
+
 			},
 
 			//详情页
@@ -172,26 +173,19 @@
 				// })
 				console.log(e.target.errMsg)
 			},
-			goToProductListPage(){
+			goToProductListPage() {
 				console.log("执行登录")
 				uni.navigateTo({
-				    url: "/pages/product/list"
+					url: "/pages/product/list"
 				});
 			},
-			goToLogin(){
-				console.log("执行登录")
-				uni.navigateTo({
-				    url: "/pages/public/login"
-				});
-			},
+
 		},
 
 	}
 </script>
 
 <style lang="scss">
-	
-
 	page {
 		background: #f5f5f5;
 	}
@@ -211,7 +205,8 @@
 			padding-top: 44px;
 			box-sizing: content-box;
 		}
-		.titleNview-text{
+
+		.titleNview-text {
 			width: 100%;
 			height: 140upx;
 			background-color: #23e8e1;
@@ -220,11 +215,13 @@
 			color: #fff;
 			font-size: 50upx;
 		}
-		.carouse-video{
+
+		.carouse-video {
 			height: 450upx;
 			width: 100%;
 			background-color: #23e8e1;
-			#myVideo{
+
+			#myVideo {
 				height: 450upx;
 				width: 100%;
 			}
@@ -258,28 +255,33 @@
 			opacity: .7;
 		}
 	}
+
 	.banner-img-box {
 		width: 100%;
 		height: 210upx;
 		padding: 10upx 0;
 		background: #fff;
+
 		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
+
 	.f-header {
 		display: flex;
 		align-items: center;
 		height: 140upx;
 		padding: 6upx 30upx 8upx;
 		background: #fff;
+
 		image {
 			flex-shrink: 0;
 			width: 80upx;
 			height: 80upx;
 			margin-right: 20upx;
 		}
+
 		.tit-box {
 			flex: 1;
 			display: flex;
@@ -303,7 +305,7 @@
 		}
 	}
 
-	
+
 
 	/* 猜你喜欢 */
 	.guess-section {
