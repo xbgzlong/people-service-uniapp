@@ -10,7 +10,7 @@
 			...mapMutations(['login'])
 		},
 		onLaunch: function() {
-			let userInfo = uni.getStorageSync('userInfo') || '';
+			let userInfo = uni.getStorageSync('userinfo') || '';
 			if(userInfo.id){
 				//更新登陆状态
 				uni.getStorage({

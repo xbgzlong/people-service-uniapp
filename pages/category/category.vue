@@ -1,16 +1,16 @@
 <template>
 	<view class="content">
+		<request-loading></request-loading>
 		<scroll-view scroll-y class="left-aside">
 			<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id === currentId}" @click="tabtap(item)">
 				{{item.name}}
 			</view>
 		</scroll-view>
 		<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
-			<view  class="s-list" >
+			<view class="s-list">
 				<view class="s-item">{{typeName}}</view>
 				<view class="t-list">
-					<view @click="navToList(item.F_ServiceId)"  class="t-item" v-for="item in tlist"
-					 :key="item.id">
+					<view @click="navToList(item)" class="t-item" v-for="item in tlist" :key="item.id">
 						<image :src="item.picture"></image>
 						<text class="price-box">¥{{item.price}}</text>
 						<text>{{item.name}}</text>
@@ -28,11 +28,11 @@
 				sizeCalcState: false,
 				tabScrollTop: 0,
 				currentId: 0,
-				serviceId:"",
+				serviceId: "",
 				flist: [],
 				slist: [],
 				tlist: [],
-				typeName:'',
+				typeName: '',
 			}
 		},
 		onLoad(options) {
@@ -55,8 +55,10 @@
 				param.queryJson = JSON.stringify({
 					typeId: 1
 				});
+				this.$showLoading();
 				this.$httpTokenRequest(opts, param).then(
 					res => {
+						that.$hideLoading();
 						let logininfo = "";
 						uni.getStorage({
 							key: 'logininfo',
@@ -74,7 +76,10 @@
 								item.id = index;
 							})
 							that.typeName = that.flist[0].F_ServiceName;
-							that.doGetServiceList(that.flist[0].F_ServiceId)
+							that.pName = that.flist[0].F_ServiceName;
+							that.pId = that.flist[0].F_ServiceId;
+							that.doGetServiceList(that.flist[0].F_ServiceId);
+
 						} else {
 							uni.showToast({
 								title: res.data.code + res.data.info,
@@ -94,7 +99,7 @@
 				// 		this.tlist.push(item); //3级分类
 				// 	}
 				// }) 
-			
+
 			},
 			doGetServiceList(F_ServiceId) {
 				var that = this;
@@ -103,19 +108,23 @@
 					method: 'get'
 				};
 				let _postParam = {
-				    pagination: {
-				        rows: 100,
-				        page: 0,
-				        sidx: 'F_CreateDate',
-				        sord: 'DESC'
-				    },
-				    queryJson: JSON.stringify({ pId: F_ServiceId })
+					pagination: {
+						rows: 100,
+						page: 0,
+						sidx: 'F_CreateDate',
+						sord: 'DESC'
+					},
+					queryJson: JSON.stringify({
+						pId: F_ServiceId
+					})
 				};
 				// if (param.multipleData) {
 				//     _postParam.queryJson = JSON.stringify(multipleData);
 				// }
+				this.$showLoading();
 				this.$httpTokenRequest(opts, _postParam).then(
 					res => {
+						that.$hideLoading();
 						let logininfo = "";
 						uni.getStorage({
 							key: 'logininfo',
@@ -131,14 +140,15 @@
 							that.tlist.forEach((item, index) => {
 								item.name = item.F_ServiceName;
 								item.id = index;
-								if(item.F_PriceStart){
+								if (item.F_PriceStart) {
 									item.price = item.F_PriceStart;
-								}else{
+								} else {
 									item.price = 0;
 								}
-								item.picture = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token;
+								item.picture = that.$baseUrl + "serviceitem/getImg?data=" + item.F_MobileIMG + "&loginMark=" + logininfo.loginMark +
+									"&token=" + logininfo.token;
 							})
-							
+
 						} else {
 							uni.showToast({
 								title: res.data.code + res.data.info,
@@ -154,10 +164,12 @@
 				}
 				this.currentId = item.id;
 				this.typeName = item.F_ServiceName;
+				this.pId = item.F_ServiceId;
+				this.pName = item.F_ServiceName;
 				this.doGetServiceList(item.F_ServiceId);
 				let index = this.slist.findIndex(sitem => sitem.pid === item.id);
 				this.tabScrollTop = this.tlist[0].top;
-				
+
 			},
 			//右侧栏滚动
 			asideScroll(e) {
@@ -185,9 +197,9 @@
 				})
 				this.sizeCalcState = true;
 			},
-			navToList(id) {
+			navToList(item) {
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: '/pages/product/product?id=' + item.F_ServiceId + "&pId=" + this.pId + "&pName=" + this.pName
 				})
 			}
 		}
@@ -257,11 +269,12 @@
 		font-size: 28upx;
 		color: $font-color-dark;
 	}
+
 	.price-box {
-		
+
 		color: $uni-color-primary;
 	}
-	
+
 	.t-list {
 		display: flex;
 		flex-wrap: wrap;

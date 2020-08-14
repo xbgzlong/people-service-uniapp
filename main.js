@@ -31,12 +31,14 @@ const goToLogin = function(){
 }
 // 所有接口
 const bmBaseApi = {
-	getBmDisplayList:"serviceitem/getBmDisplayList",
-	login:'account/login',
-	getServiceitemList:"serviceitem/list",
-	getTypepagelist:"serviceitem/typepagelist",
-	getServiceDetail:'serviceitem/getData',
-	getServicePrice:'serviceitem/getPriceList',
+	getBmDisplayList:"serviceitem/getBmDisplayList",//首页获取便民服务
+	login:'account/login', //登录
+	getServiceitemList:"serviceitem/list",//获取分类列表
+	getTypepagelist:"serviceitem/typepagelist",//获取分类服务列表
+	getServiceDetail:'serviceitem/getData',//获取服务详情
+	getServicePrice:'serviceitem/getPriceList',//获取价格详情
+	postCreateOrder:"createorder/save",// 预约订单
+	getUserorderquery:'userorderquery/pagelist', //订单列表查询
 };
 
 const baseUrl = 'http://120.224.235.68:8060/';  
@@ -164,7 +166,19 @@ Vue.prototype.$httpRequest = httpRequest;
 Vue.prototype.$httpTokenRequest = httpTokenRequest;
 Vue.prototype.$goToLogin=goToLogin;
 App.mpType = 'app'
-
+//请求加载组件
+import requestLoading from './components/compt_requestLoading.vue';
+//组件挂载到全局，方便每个页面使用
+Vue.component('request-loading', requestLoading);
+//挂载全局显示/隐藏请求加载动画
+function showLoading(){
+	store.commit('request_show_loading');
+}
+function hideLoading(){
+	store.commit('request_hide_loading');
+}
+Vue.prototype.$showLoading = showLoading; //全局显示动画可以 this.$showLoading();
+Vue.prototype.$hideLoading = hideLoading; //全局隐藏动画可以 this.$hideLoading();
 const app = new Vue({
     ...App
 })

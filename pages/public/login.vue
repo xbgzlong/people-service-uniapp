@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<request-loading></request-loading>
 		<view class="left-bottom-sign"></view>
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
 		<view class="right-top-sign"></view>
@@ -21,14 +22,14 @@
 				</view>
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
-			<view class="forget-section">
+			<!-- <view class="forget-section">
 				忘记密码?
-			</view>
+			</view> -->
 		</view>
-		<view class="register-section">
+	<!-- 	<view class="register-section">
 			还没有账号?
 			<text @click="toRegist">马上注册</text>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -46,7 +47,7 @@
 			}
 		},
 		onLoad() {
-
+			
 		},
 		methods: {
 			...mapMutations(['login']),
@@ -119,9 +120,10 @@
 					method: 'post',
 					url: this.$bmBaseApi.login,
 				}
+				this.$showLoading();
 				this.$httpRequest(opts, postdata).then(res => {
 					that.logining = false;
-					console.log(res)
+					this.$hideLoading();
 					if (res == null) {
 						that.$api.msg('无法连接服务器,请检测网络');	
 						return;
@@ -139,7 +141,7 @@
 						    success: function () {
 						        uni.setStorage({
 						            key: 'userinfo',
-						            data: res.data.data,
+						            data: res.data.data.baseinfo,
 						            success: function () {
 						                that.mobile = '';
 						                that.password = '';

@@ -1,6 +1,5 @@
 <template>
 	<view class="content">
-		
 		<view class="mix-list-cell" :class="border" @click="eventClick" hover-class="cell-hover"  :hover-stay-time="50">
 			<text
 				v-if="icon"

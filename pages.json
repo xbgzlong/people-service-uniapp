@@ -49,7 +49,7 @@
 		}, {
 			"path": "pages/set/set",
 			"style": {
-				"navigationBarTitleText": "设置"
+				"navigationBarTitleText": "个人资料"
 			}
 		},
 		
@@ -85,22 +85,23 @@
 					"bounce": "none",
 					"titleNView": {
 						"type": "transparent",
-						"buttons": [{
+						"buttons": [
+							{
 								"fontSrc": "/static/yticon.ttf",
 								"text": "\ue60f",
 								"fontSize": "24",
 								"color": "#303133",
 								"width": "46px",
 								"background": "rgba(0,0,0,0)"
-							},
-							{
-								"fontSrc": "/static/yticon.ttf",
-								"text": "\ue744",
-								"fontSize": "28",
-								"color": "#303133",
-								"background": "rgba(0,0,0,0)",
-								"redDot": true
 							}
+							// {
+							// 	"fontSrc": "/static/yticon.ttf",
+							// 	"text": "\ue744",
+							// 	"fontSize": "28",
+							// 	"color": "#303133",
+							// 	"background": "rgba(0,0,0,0)",
+							// 	"redDot": true
+							// }
 						]
 					}
 				}
@@ -129,7 +130,7 @@
 		}, {
 			"path": "pages/order/createOrder",
 			"style": {
-				"navigationBarTitleText": "创建订单"
+				"navigationBarTitleText": "预约"
 			}
 		}, {
 			"path": "pages/address/address",

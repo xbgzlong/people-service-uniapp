@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<request-loading></request-loading>
 		<view class="carousel">
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
@@ -55,13 +56,13 @@
 			</navigator> -->
 			<!-- :class="{active: favorite}" -->
 			<view class="p-b-btn"  @click="toFavorite">
-				<text class="yticon icon-fenxiang2"></text>
+				<text class="yticon icon-dianhua-copy"></text>
 				<text>咨询</text>
 			</view>
 
 			<view class="action-btn-group">
-				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+				<button type="primary" class=" action-btn no-border buy-now-btn" @click="reservation">立即预约</button>
+				<!-- <button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button> -->
 			</view>
 		</view>
 
@@ -76,6 +77,8 @@
 		
 		data() {
 			return {
+				pId:'',
+				pName:"",
 				name:"",
 				price:"",
 				specClass: 'none',
@@ -91,6 +94,8 @@
 		async onLoad(options) {
 			//接收传值,id
 			let id = options.id;
+			this.pId = options.pId;
+			this.pName = options.pName;
 			if (id) {
 				this.doGetServiceDetail(id);
 			}
@@ -121,6 +126,7 @@
 						if (res.data.code == 200) {
 							that.name = res.data.data.F_ServiceName;
 							that.price = res.data.data.F_ServicePrice;
+							that.key = res.data.data.F_ServiceId;
 							that.doGetServicePrice(id)
 						} else {
 							uni.showToast({
@@ -166,9 +172,10 @@
 			toFavorite() {
 				this.favorite = !this.favorite;
 			},
-			buy() {
+			reservation() {
+				// pId: pId, pName: pName, serviceid: key, servicename: name 
 				uni.navigateTo({
-					url: `/pages/order/createOrder`
+					url: "/pages/order/createOrder?pId="+this.pId+"&pName="+this.pName+"&serviceid="+this.key+"&servicename="+this.name
 				})
 			},
 			stopPrevent() {}

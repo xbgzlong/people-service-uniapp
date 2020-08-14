@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<request-loading></request-loading>
 		<!-- 头部轮播 -->
 		<view class="carousel-section">
 			<!-- 标题栏和状态栏占位符 -->
@@ -100,6 +101,8 @@
 					url: this.$bmBaseApi.getBmDisplayList,
 					method: 'get'
 				};
+				this.$showLoading();
+				
 				this.$httpTokenRequest(opts, null).then(
 					res => {
 						let logininfo = "";
@@ -112,6 +115,7 @@
 						if (!logininfo) {
 							return false;
 						}
+						this.$hideLoading()
 						if (res.data.code == 200) {
 							'config.webapi + "/serviceitem/getImg?data=" + data[i].F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token'
 							that.bmgoodsList = res.data.data;
