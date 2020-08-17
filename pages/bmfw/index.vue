@@ -35,11 +35,7 @@
 				typeName: '',
 			}
 		},
-		props: {
-			typeId: {
-				type:Number,
-			}
-		},
+		
 		onLoad(options) {
 			if (options) {
 				console.log(options)
@@ -74,7 +70,7 @@
 					});
 					return
 				}
-				var typeId = that.typeId;
+				var typeId = 1;
 				
 				let opts = {
 					url: this.$bmBaseApi.getServiceitemList,

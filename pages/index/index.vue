@@ -8,24 +8,26 @@
 			<!-- 背景色区域 -->
 			<view class="titleNview-text">12349便民服务</view>
 			<view class="carouse-video">
-				<video id="myVideo" src="../../static/img/banner.mp4" objectFit="fill" @error="videoErrorCallback" controls></video>
+				<video  id="myVideo" :src="src" objectFit="fill"
+				 @error="videoErrorCallback" controls
+				  poster="../../static/img/banner.png" @play='playMyVideo' ></video>
 			</view>
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item" @click="goToProductListPage">
+			<view class="cate-item" @click="goToProductListPage(1)">
 				<image src="/static/img/bmfw.png"></image>
 				<text>便民服务</text>
 			</view>
-			<view class="cate-item" @click="goToProductListPage">
+			<view class="cate-item" @click="goToProductListPage(2)">
 				<image src="/static/img/jjyl.png"></image>
 				<text>居家养老</text>
 			</view>
-			<view class="cate-item">
+			<view class="cate-item" @click="notDevalop">
 				<image src="/static/img/wljg.png"></image>
 				<text>为老机构</text>
 			</view>
-			<view class="cate-item">
+			<view class="cate-item" @click="notDevalop">
 				<image src="/static/img/wlyp.png"></image>
 				<text>为老用品</text>
 			</view>
@@ -34,7 +36,7 @@
 			<image src="/static/img/ggl.jpg" mode="scaleToFill"></image>
 		</view>
 		<!-- 便民服务 -->
-		<view class="f-header m-t">
+		<view class="f-header m-t" @click="goToProductListPage(1)">
 			<image src="/static/img/bmfw.png"></image>
 			<view class="tit-box">
 				<text class="tit">便民服务</text>
@@ -53,7 +55,7 @@
 			</view>
 		</view>
 		<!-- 猜你喜欢 -->
-		<view class="f-header m-t">
+		<view class="f-header m-t"  @click="goToProductListPage(2)">
 			<image src="/static/img/jjyl.png"></image>
 			<view class="tit-box">
 				<text class="tit">居家养老</text>
@@ -62,7 +64,7 @@
 			<text class="yticon icon-you"></text>
 		</view>
 
-		<view class="guess-section">
+		<view class="guess-section"  >
 			<view v-for="(item, index) in ylgoodsList" :key="index" class="guess-item" @click="navToDetailPage(item)">
 				<view class="image-wrapper">
 					<image :src="item.image" mode="aspectFill"></image>
@@ -79,24 +81,46 @@
 	export default {
 		data() {
 			return {
+				src:"https://video-1255598775.cos.ap-nanjing.myqcloud.com/banner.mp4",
+				videoContext:'',
 				bmgoodsList: [],
 				ylgoodsList: []
 			};
 		},
 		onLoad() {
-			this.loadData();
+			
+		},
+		onReady() {
+			this.videoContext = uni.createVideoContext('myVideo');
 		},
 		onShow() {
-			this.$goToLogin();
+			this.loadData();
 		},
 		methods: {
-			/**
-			 * 请求静态数据只是为了代码不那么乱
-			 * 分次请求未作整合
-			 */
-
 			loadData() {
 				var that = this;
+				let userinfo = "";
+				uni.getStorage({
+				    key: 'userinfo',
+				    success: function(ress) {
+				        userinfo = ress.data
+				    }
+				});
+				if (!userinfo) {
+					uni.showModal({
+					    title: '提示',
+					    content: '您还未登录',
+						showCancel:false,
+					    success: function (res) {
+					        if (res.confirm) {
+					           uni.navigateTo({
+					               url: '/pages/public/login'
+					           });
+					        } 
+					    }
+					});
+					return
+				}
 				let opts = {
 					url: this.$bmBaseApi.getBmDisplayList,
 					method: 'get'
@@ -105,6 +129,7 @@
 				
 				this.$httpTokenRequest(opts, null).then(
 					res => {
+						this.$hideLoading()
 						let logininfo = "";
 						uni.getStorage({
 							key: 'logininfo',
@@ -115,7 +140,7 @@
 						if (!logininfo) {
 							return false;
 						}
-						this.$hideLoading()
+						
 						if (res.data.code == 200) {
 							'config.webapi + "/serviceitem/getImg?data=" + data[i].F_MobileIMG + "&loginMark=" + logininfo.loginMark + "&token=" + logininfo.token'
 							that.bmgoodsList = res.data.data;
@@ -130,6 +155,11 @@
 								title: res.data.code + res.data.info,
 								duration: 1500
 							})
+							if(res.data.code == 410){
+								uni.navigateTo({
+									url:"/pages/public/login"
+								})
+							}
 						}
 					});
 				this.$httpTokenRequest(opts, null).then(
@@ -161,7 +191,15 @@
 					})
 
 			},
-
+			notDevalop(){
+				uni.showToast({
+					title:"功能暂未开放",
+					duration:1500
+				})
+			},
+			playMyVideo(){
+				
+			},
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
@@ -175,13 +213,19 @@
 				// 	content: e.target.errMsg,
 				// 	showCancel: false
 				// })
-				console.log(e.target.errMsg)
+				console.log(e)
 			},
-			goToProductListPage() {
-				console.log("执行登录")
-				uni.navigateTo({
-					url: "/pages/product/list"
-				});
+			goToProductListPage(type) {
+				
+				if(type ==1){
+					uni.switchTab({
+					    url: '/pages/bmfw/index'
+					});
+				}else{
+					uni.switchTab({
+					    url: '/pages/jjyl/index'
+					});
+				}
 			},
 
 		},
@@ -202,13 +246,13 @@
 	.carousel-section {
 		width: 100%;
 		position: relative;
-		padding-top: 10px;
+		padding-top: 0px;
 
-		.titleNview-placing {
-			height: var(--status-bar-height);
-			padding-top: 44px;
-			box-sizing: content-box;
-		}
+		// .titleNview-placing {
+		// 	height: var(--status-bar-height);
+		// 	padding-top: 0px;
+		// 	box-sizing: content-box;
+		// }
 
 		.titleNview-text {
 			width: 100%;

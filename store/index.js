@@ -15,7 +15,7 @@ const store = new Vuex.Store({
 			state.hasLogin = true;
 			state.userInfo = provider;
 			uni.setStorage({ //缓存用户登陆状态
-				key: 'userInfo',
+				key: 'userinfo',
 				data: provider
 			})
 			console.log(state.userInfo);
@@ -24,7 +24,7 @@ const store = new Vuex.Store({
 			state.hasLogin = false;
 			state.userInfo = {};
 			uni.removeStorage({
-				key: 'userInfo'
+				key: 'userinfo'
 			})
 		},
 		request_show_loading(state) {

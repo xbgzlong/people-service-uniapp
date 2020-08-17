@@ -8,12 +8,9 @@
 				"app-plus": {
 					"titleNView": {
 						"type": "transparent"
-						// "searchInput": {
-						// 	"backgroundColor": "rgba(231, 231, 231,.7)",
-						// 	"borderRadius": "16px",
-						// 	"placeholder": "请输入地址 如：大钟寺",
-						// 	"disabled": true,
-						// 	"placeholderColor": "#606266"
+						// "view": {
+						// 	"height":
+							
 						// },
 						// "buttons": [{
 						// 		"fontSrc": "/static/yticon.ttf",
@@ -60,9 +57,9 @@
 				"navigationBarTitleText": "修改资料"
 			}
 		}, {
-			"path": "pages/cart/cart",
+			"path": "pages/jjyl/index",
 			"style": {
-				"navigationBarTitleText": "购物车"
+				"navigationBarTitleText": "居家养老"
 			}
 		}, {
 			"path": "pages/public/login",
@@ -124,6 +121,14 @@
 					"bounce": "none"
 				}
 			}
+		},{
+			"path": "pages/order/orderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
 		}, {
 			"path": "pages/money/money",
 			"style": {}
@@ -161,9 +166,9 @@
 			}
         }
         ,{
-            "path" : "pages/category/category",
+            "path" : "pages/bmfw/index",
             "style" : {
-				"navigationBarTitleText": "分类",
+				"navigationBarTitleText": "便民服务",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -195,16 +200,16 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/category/category",
+				"pagePath": "pages/bmfw/index",
 				"iconPath": "static/img/tab20.png",
 				"selectedIconPath": "static/img/tab21.png",
-				"text": "分类"
+				"text": "便民服务"
 			},
 			{
-				"pagePath": "pages/cart/cart",
+				"pagePath": "pages/jjyl/index",
 				"iconPath": "static/img/tab30.png",
 				"selectedIconPath": "static/img/tab31.png",
-				"text": "购物车"
+				"text": "居家养老"
 			},
 			{
 				"pagePath": "pages/user/user",

@@ -165,6 +165,11 @@
 								title: res.data.code + res.data.info,
 								duration: 1500
 							})
+							if(res.data.code == 410){
+								uni.navigateTo({
+									url:"/pages/public/login"
+								})
+							}
 						}
 					});
 			},

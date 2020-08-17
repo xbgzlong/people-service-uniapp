@@ -127,14 +127,29 @@
 							return false;
 						}
 						if (res.data.code == 200) {
-							uni.navigateBack({
-								index: 1
+							uni.showModal({
+								title:"创建成功",
+								showCancel:false,
+								success:function(res){
+									if(res.confirm){
+										uni.navigateBack({
+											index: 1
+										})
+									}
+									
+								}
 							})
+							
 						} else {
 							uni.showToast({
 								title: res.data.code + res.data.info,
 								duration: 1500
 							})
+							if(res.data.code == 410){
+								uni.navigateTo({
+									url:"/pages/public/login"
+								})
+							}
 						}
 					});
 

@@ -41,15 +41,15 @@
 					<text>我的便民服务</text>
 				</view>
 				<view class="order-section">
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=全部订单')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-shouye"></text>
 						<text>全部订单</text>
 					</view>
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=未分配')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-daifukuan"></text>
 						<text>未分配</text>
 					</view>
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=未服务')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-yishouhuo"></text>
 						<text>未服务</text>
 					</view>
@@ -61,15 +61,15 @@
 					<text>我的居家养老</text>
 				</view>
 				<view class="order-section">
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=全部订单')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-shouye"></text>
 						<text>全部订单</text>
 					</view>
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=未分配')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-daifukuan"></text>
 						<text>未分配</text>
 					</view>
-					<view class="order-item" @click="navTo('/pages/order/order?state=0')" hover-class="common-hover" :hover-stay-time="50">
+					<view class="order-item" @click="navTo('/pages/order/order?state=0&title=未服务')" hover-class="common-hover" :hover-stay-time="50">
 						<text class="yticon icon-yishouhuo"></text>
 						<text>未服务</text>
 					</view>
@@ -129,13 +129,7 @@
 			}
 		},
 		onShow() {
-			let logininfo = "";
-			uni.getStorage({
-				key: 'logininfo',
-				success: function(ress) {
-					logininfo = ress.data
-				}
-			});
+			
 			let userinfo = "";
 			uni.getStorage({
 				key: 'userinfo',
@@ -144,6 +138,18 @@
 				}
 			});
 			if(!userinfo){
+				uni.showModal({
+				    title: '提示',
+				    content: '您还未登录',
+					showCancel:false,
+				    success: function (res) {
+				        if (res.confirm) {
+				           uni.navigateTo({
+				               url: '/pages/public/login'
+				           });
+				        } 
+				    }
+				});
 				return
 			}
 			this.hasLogin = true;
