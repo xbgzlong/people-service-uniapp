@@ -5,7 +5,9 @@
   "author": "AlEN",
   "private": true,
   "scripts": {},
-  "dependencies": {},
+  "dependencies": {
+    "js-md5": "^0.7.3"
+  },
   "devDependencies": {
     "js-md5": "^0.7.3"
   },
