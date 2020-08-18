@@ -298,6 +298,7 @@
 			dateSeach(){
 				this.isSeach = false;
 				this.page = 1;
+				this.navList[0].orderList = [];
 				this.doGetUserorderquery();
 				
 			},

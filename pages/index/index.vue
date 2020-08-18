@@ -203,9 +203,9 @@
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
-				let id = item.title;
+				console.log(item)
 				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
+					url: "/pages/product/product?id="+item.F_ServiceId+ "&pId=" + item.F_ParentId + "&pName=" + item.F_Pname
 				})
 			},
 			videoErrorCallback: function(e) {
